@@ -32,7 +32,7 @@ show()
 def get_values():
     global entries
     values = [float(entry.get()) for entry in entries]
-    get_values.np_array = np.array(values)                   #get_values.  converto to global varible
+    get_values.np_array = np.array(values)                   #get_values.  conver to to global varible
     root.destroy()
     
 root = tk.Tk()
@@ -142,12 +142,6 @@ def eps1(p,x):
 parametros1=[max(X),int(np.mean(a[0])),bandx,min(X)]   
    
 (anchox,bx,cx,dx),_=leastsq(eps1,parametros1,args=(x))
-
-print('ax opt.= '+str(round(anchox,2))+'| ax input:'+str(max(X))        )
-print('bx opt.= '+str(round(bx,2))+'| bx input:'+str(int(np.mean(a[1]))))
-print('cx opt.= '+str(round(cx,2))+'| cx input:'+str(round(bandx))      )
-print('dx opt.= '+str(round(dx,2))+'| dx input:'+str(min(Y))            )
-
 #######################FIT Y AXIS##################################
 bandy= 7#std(Y,ddof=1) #float(input('Ancho en Y estimado para realizar el ajuste en pixeles: ')) 
 y= np.linspace(0,len(Y),len(Y))
@@ -156,11 +150,6 @@ def eps0(p,x):
     return func1(x,p[0],p[1],p[2],p[3])-Y
 parametros0=[max(Y),int(np.mean(a[1])),bandy,min(Y)]   
 (anchoy,by,cy,dy),_=leastsq(eps0,parametros0,args=(y))
-
-print('ay opt.= '+str(round(anchoy,2))+'| ay input:'+str(max(Y))      )
-print('by opt.= '+str(round(by,2))+'| by input:'+str(int(np.mean(a[0])))) 
-print('cy opt.= '+str(round(cy,2))+'| cy input:'+str(round(bandy))    )
-print('dy opt.= '+str(round(dy,2))+'| dy input:'+str(min(Y))          )
 ################################## Functions ########################
 extension=5
 xx1=np.linspace(0-extension,len(X)+extension,2000)
@@ -170,6 +159,24 @@ Gaussy= func1(xx2,anchoy,by,cy,dy)
 MFDx=round(max(Gaussx*(1/np.e**2)),2)
 MFDy=round(max(Gaussy*(1/np.e**2)),2)
 #####################################################################
+#############Write the image name######################################
+def submit_name():
+    submit_name.name = name_entry.get()
+    root.destroy()
+
+root = tk.Tk()
+root.title('Name of image')
+
+name_label = tk.Label(root, text='Enter image name:')
+name_label.pack()
+
+name_entry = tk.Entry(root)
+name_entry.pack()
+
+continue_button = tk.Button(root, text='Continue', command=submit_name)
+continue_button.pack()
+
+root.mainloop()
 ##################################PLOT FITS##########################
 
 fig =figure(1,figsize=(13,13))
@@ -196,7 +203,7 @@ axhline(y = MFDy, color = 'r', linestyle = '-')
 title('Y AXIS')
 legend(loc=0)
 ylim(0,260)
-nameimg=input('Write the name of image: ')
+nameimg=submit_name.name
 savefig('Image/'+str(nameimg)+'.png')
 show()
 
@@ -205,16 +212,25 @@ show()
 ######################## X AXIS#################################
 xx= np.linspace(0,len(X),len(X))               #Matrix with less point so you can do the direct subtraction.
 rsquarex = r2_score(X,func1(xx,anchox,bx,cx,dx))
-print('R-square in X axis is: '+str(round(rsquarex,4)))
+
 
 ######################## Y AXIS#################################
 yy= np.linspace(0,len(Y),len(Y))               #Matrix with less point so you can do the direct subtraction.
 rsquarey =r2_score(Y, func1(yy,anchoy,by,cy,dy))
-print('R-square in Y axis: '+str(round(rsquarey,4)))
 
-#MFD
-print("The MFD of x-axis is in y="+ str(MFDx))
-print("The MFD of y-axis is in y="+ str(MFDy))
+##### FINAL SUMARY ###########3
+
+window = tk.Tk()
+window.title("Final summary")
+
+text = f"ax opt.= : {round(anchox,2)}\nax input: {max(X)}\nbx opt.= {round(bx,2)}\n bx input: {int(np.mean(a[1]))}\ncx opt.= {round(cx,2)}\ncx input: {round(bandx)}\ndx opt.= {round(dx,2)}\ndx input: {min(X)}\nay opt.= : {round(anchoy,2)}\nay input: {max(Y)}\nby opt.= {round(by,2)}\n by input: {int(np.mean(a[0]))}\ncy opt.= {round(cy,2)}\ncy input: {round(bandy)}\ndx opt.= {round(dy,2)}\ndx input: {min(Y)}\nR-square in X axis is: {round(rsquarex,4)}\nR-square in Y axis: {round(rsquarey,4)}\nThe MFD of x-axis is in y= {MFDx}\nThe MFD of y-axis is in y= {MFDy}"
+
+label = tk.Label(window, text=text)
+label.pack(padx=20, pady=20)
+window.mainloop()     #Show the window
+
+
+
 
 
 
