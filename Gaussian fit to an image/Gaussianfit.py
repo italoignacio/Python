@@ -48,8 +48,10 @@ for i in range(4):
 
 button = tk.Button(root, text="Continue", command=get_values)
 button.pack()
-
+button.bind("<Button-1>", lambda event: get_values())
+button.bind("<Return>", lambda event: get_values())
 root.mainloop()
+
 Limits0=get_values.np_array
 Limits=Limits0.astype(int)
 # # Zoom to image
@@ -175,7 +177,8 @@ name_entry.pack()
 
 continue_button = tk.Button(root, text='Continue', command=submit_name)
 continue_button.pack()
-
+continue_button.bind("<Button-1>", lambda event: submit_name())
+continue_button.bind("<Return>", lambda event: submit_name())
 root.mainloop()
 ##################################PLOT FITS##########################
 
