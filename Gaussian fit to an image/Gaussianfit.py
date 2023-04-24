@@ -79,8 +79,8 @@ if option==1:
     subplot(221)        
     plot(pixelesy,Perfilnormy,label='Pixel number '+str(a[0][1]))
     legend(loc=0)
-    xlabel('Intensity normalized')
-    ylabel('Color range')
+    xlabel('Pixels')
+    ylabel('Intensity normalized')
     title('X axis normalized')
     grid(linestyle='--',alpha=0.4)
     ############################ORIGINAL IMAGE########################################
